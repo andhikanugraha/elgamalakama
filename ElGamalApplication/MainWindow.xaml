@@ -1,0 +1,133 @@
+﻿<Window x:Class="ElGamalApplication.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="ElGamal Cryptography" Height="215" Width="449" ResizeMode="CanMinimize" WindowStartupLocation="CenterScreen">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="164*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <TabControl Height="152" Margin="12,12,12,0" Name="tabControl1" VerticalAlignment="Top">
+            <TabItem Header="Generate Key" Name="generateKeyTab">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*" />
+                        <ColumnDefinition Width="1*" />
+                        <ColumnDefinition Width="1*" />
+                        <ColumnDefinition Width="1*" />
+                        <ColumnDefinition Width="1*" />
+                        <ColumnDefinition Width="1*" />
+                        <ColumnDefinition Width="6" />
+                    </Grid.ColumnDefinitions>
+                    <Label Content="p" Height="28" Margin="6,2,6,0" VerticalAlignment="Top" Width="Auto"/>
+                    <TextBox x:Name="pTextBox" Grid.Column="1" Height="23" Margin="0,6,0,0" TextWrapping="Wrap" VerticalAlignment="Top"/>
+                    <Label Content="g" Grid.Column="2" Margin="6,2,6,0" VerticalAlignment="Top" Width="Auto"/>
+                    <TextBox x:Name="gTextBox" Grid.Column="3" Height="23" Margin="0,6,0,0" TextWrapping="Wrap" VerticalAlignment="Top"/>
+                    <Label Content="x" Grid.Column="4" Margin="6,2,6,0" VerticalAlignment="Top" Width="Auto"/>
+                    <TextBox x:Name="xTextBox" Grid.Column="5" Height="23" Margin="0,6,0,0" TextWrapping="Wrap" VerticalAlignment="Top"/>
+                    <Label Content="y" Grid.Row="1" Grid.Column="4" Margin="6,2,6,0" VerticalAlignment="Top" Width="Auto"/>
+                    <TextBox x:Name="yTextBox" Grid.Row="1" Grid.Column="5" Height="23" Margin="0,6,0,0" TextWrapping="Wrap" VerticalAlignment="Top"/>
+                    <Button x:Name="generatePrivateKeyButton" Grid.ColumnSpan="4" Content="Generate Keys" Margin="6,6,0,0" Grid.Row="1" VerticalAlignment="Top" Height="23" Click="generatePrivateKeyButton_Click"/>
+                    <Button x:Name="loadPublicKeyButton" Grid.ColumnSpan="2" Content="Load Public Key" Margin="6,10,0,0" Grid.Row="2" VerticalAlignment="Top" Height="23"/>
+                    <Button x:Name="loadPrivateKeyButton" Grid.ColumnSpan="2" Content="Load Private Key" Grid.Column="2" Margin="6,10,0,0" Grid.Row="2" VerticalAlignment="Top" Height="23"/>
+                    <Button x:Name="saveKeysButton" Grid.ColumnSpan="2" Content="Save Keys" Grid.Column="4" Margin="5,10,0,0" Grid.Row="2" VerticalAlignment="Top" Height="23" Click="saveKeysButton_Click"/>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Encrypt" Name="encryptTab">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="19*" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="25" />
+                        <ColumnDefinition Width="92"/>
+                        <ColumnDefinition Width="118" />
+                        <ColumnDefinition Width="80"/>
+                        <ColumnDefinition Width="158*" />
+                    </Grid.ColumnDefinitions>
+                    <Label Content="Unencrypted File" Height="28" HorizontalAlignment="Left" Margin="6,2,0,0" Name="label1" VerticalAlignment="Top" Width="111" Grid.RowSpan="2" Grid.ColumnSpan="2" />
+                    <TextBox Grid.Column="2" Height="23" HorizontalAlignment="Left" Margin="0,6,0,0" Name="unencryptedFileName" VerticalAlignment="Top" Width="120" Grid.ColumnSpan="2" />
+                    <TextBox Grid.Column="2" Grid.Row="2" Height="23" HorizontalAlignment="Left" Margin="0,7,0,0" Name="encryptionDestinationFileName" VerticalAlignment="Top" Width="120" Grid.ColumnSpan="2" Grid.RowSpan="2" />
+                    <Label Content="Save As" Grid.Row="2" Height="28" HorizontalAlignment="Left" Margin="6,3,0,0" Name="label3" VerticalAlignment="Top" Width="105" Grid.RowSpan="2" Grid.ColumnSpan="2" />
+                    <Button Content="Browse" Grid.Column="3" Height="23" HorizontalAlignment="Left" Margin="8,6,0,0" Name="browseUnencryptedFileButton" VerticalAlignment="Top" Width="66" Click="browseUnencryptedFileButton_Click" />
+                    <Button Content="Browse" Grid.Column="3" Grid.Row="2" Height="23" HorizontalAlignment="Left" Margin="8,7,0,0" Name="browseEncryptionDestinationFileButton" VerticalAlignment="Top" Width="66" Click="browseEncryptionDestinationFileButton_Click" Grid.RowSpan="2" />
+                    <Button Content="Encrypt" Grid.Column="2" Grid.Row="3" Height="23" HorizontalAlignment="Left" Margin="0,7,0,0" Name="encryptButton" VerticalAlignment="Top" Width="120" Click="encryptButton_Click" Grid.ColumnSpan="2" />
+                    <ProgressBar Height="22" Margin="8,8,6,0" Name="encryptionProgressBar" VerticalAlignment="Top" Grid.Column="3" Grid.Row="3" Grid.ColumnSpan="2" />
+                    <Button Content="Open" Grid.Column="4" Height="23" Margin="0,6,6,0" Name="openUnencryptedFileButton" VerticalAlignment="Top" Click="openUnencryptedFileButton_Click" />
+                    <Button Content="Open" Grid.Column="4" Grid.Row="2" Height="23" Margin="0,7,6,0" Name="openEncryptionDestinationFileButton" VerticalAlignment="Top" Click="openEncryptionDestinationFileButton_Click" Grid.RowSpan="2" />
+                    <Grid Grid.Row="1" Grid.ColumnSpan="5" Margin="0,0,0,27" Grid.RowSpan="2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="2*"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Content="p" Grid.Column="0" Margin="6,0,0,0" Height="28"/>
+                        <TextBox Grid.Column="1" Margin="0,6,0,0"/>
+                        <Label Content="q" Grid.Column="2" Margin="6,0,0,0" Height="28"/>
+                        <TextBox Grid.Column="3" Margin="0,6,0,0"/>
+                        <Label Content="x" Grid.Column="4" Margin="6,0,0,0" Height="28"/>
+                        <TextBox Grid.Column="5" Margin="0,6,0,0"/>
+                        <Button Grid.Column="6" Margin="6,6,6,0" Height="23" Content="Load"/>
+                    </Grid>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Decrypt" Name="decryptTab">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="117" />
+                        <ColumnDefinition Width="198" />
+                        <ColumnDefinition Width="158*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="170*" />
+                    </Grid.RowDefinitions>
+                    <Label Content="Encrypted File" Height="28" HorizontalAlignment="Left" Margin="6,2,0,0" Name="label4" VerticalAlignment="Top" Width="111" Grid.RowSpan="2" />
+                    <TextBox Grid.Column="1" Height="23" HorizontalAlignment="Left" Margin="0,6,0,0" Name="encryptedFileName" VerticalAlignment="Top" Width="120" />
+                    <TextBox Grid.Column="1" Grid.Row="2" Height="23" HorizontalAlignment="Left" Margin="0,6,0,0" Name="decryptionDestinationFileName" VerticalAlignment="Top" Width="120" />
+                    <Label Content="Save As" Grid.Row="2" Height="28" HorizontalAlignment="Left" Margin="6,2,0,0" Name="label6" VerticalAlignment="Top" Width="105" Grid.RowSpan="2" />
+                    <Button Content="Browse" Grid.Column="1" Height="23" HorizontalAlignment="Left" Margin="126,6,0,0" Name="browseEncryptedFileButton" VerticalAlignment="Top" Width="66" Click="browseEncryptedFileButton_Click" />
+                    <Button Content="Browse" Grid.Column="1" Grid.Row="2" Height="23" HorizontalAlignment="Left" Margin="126,6,0,0" Name="browseDecryptionDestinationFileButton" VerticalAlignment="Top" Width="66" Click="browseDecryptionDestinationFileButton_Click" />
+                    <Button Content="Decrypt" Grid.Column="1" Grid.Row="3" Height="23" HorizontalAlignment="Left" Margin="0,6,0,0" Name="decryptButton" VerticalAlignment="Top" Width="120" Click="decryptButton_Click" />
+                    <ProgressBar Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="3" Height="22" HorizontalAlignment="Left" Margin="126,7,0,0" Name="decryptionProgressBar" VerticalAlignment="Top" Width="147" />
+                    <Button Content="Open" Grid.Column="2" Height="23" Margin="0,6,6,0" Name="openEncryptedFileButton" VerticalAlignment="Top" Click="openEncryptedFileButton_Click" />
+                    <Button Content="Open" Grid.Column="2" Grid.Row="2" Height="23" HorizontalAlignment="Left" Margin="1,6,0,0" Name="openDecryptionDestinationFileButton" VerticalAlignment="Top" Width="75" Click="openDecryptionDestinationFileButton_Click" />
+                    <Grid Grid.Row="1" Grid.ColumnSpan="5" Margin="0,0,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="2*"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Content="p" Grid.Column="0" Margin="6,0,0,0" Height="28"/>
+                        <TextBox Grid.Column="1" Margin="0,6,0,0"/>
+                        <Label Content="q" Grid.Column="2" Margin="6,0,0,0" Height="28"/>
+                        <TextBox Grid.Column="3" Margin="0,6,0,0"/>
+                        <Label Content="y" Grid.Column="4" Margin="6,0,0,0" Height="28"/>
+                        <TextBox Grid.Column="5" Margin="0,6,0,0"/>
+                        <Button Grid.Column="6" Margin="6,6,6,0" Height="23" Content="Load"/>
+                    </Grid>
+                </Grid>
+            </TabItem>
+        </TabControl>
+    </Grid>
+    
+</Window>
