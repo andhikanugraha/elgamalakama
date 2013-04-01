@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual C# Express 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ElGamalApplication", "ElGamalApplication\ElGamalApplication.csproj", "{57C607BA-D08E-4689-9EF0-EDCF05FE0E90}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ElGamalApplication", "ElGamalApplication1\ElGamalApplication1.csproj", "{57C607BA-D08E-4689-9EF0-EDCF05FE0E90}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

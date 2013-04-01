@@ -1,0 +1,14 @@
+Saat di encipt, file dipotong-potong menjadi block. Panjang Block disesuaikan dengan nilai P pada private Key.
+
+Ex : Jika nilai P = 256, maka panjang blok adalah 8 bit.
+
+misal file berisi : "aku"
+P bernilai 203 maka panjang block 7 bit maka pemotongan file menjadi
+01000000011101010110101 -> 0100000|0001110|1010110|101
+
+Ketika decript maka yang akan didapatkan adalah 
+0100000
+0001110
+1010110
+101
+Lalu setelah di dekripsi, file dibentuk dengan menggabungkan deret2 block di atas.

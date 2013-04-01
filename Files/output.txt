@@ -1,0 +1,3 @@
+#format (nilai dalam hexa)
+#(nilai a, nilai b)(a,b).......
+(49B,754)(49B,78)(49B,73E)
