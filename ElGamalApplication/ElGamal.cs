@@ -116,17 +116,28 @@ namespace ElGamalApplication
 
             int pos = 0;
             char[] hexChars;
+            char currentChar;
             string hexString;
             while (pos <= br.BaseStream.Length)
             {
                 br.ReadChar(); // (
-                hexChars = br.ReadChars(blockLength * 2); // 1 byte = 2 hex
-                hexString = new String(hexChars);
+                currentChar = br.ReadChar();
+                hexString = "";
+                while (currentChar != ',')
+                {
+                    hexString += currentChar;
+                    currentChar = br.ReadChar();
+                }
+                
                 long a = long.Parse(hexString, System.Globalization.NumberStyles.HexNumber);
 
-                br.ReadChar(); // ,
-                hexChars = br.ReadChars(blockLength * 2); // 1 byte = 2 hex
-                hexString = new String(hexChars);
+                currentChar = br.ReadChar();
+                hexString = "";
+                while (currentChar != ',')
+                {
+                    hexString += currentChar;
+                    currentChar = br.ReadChar();
+                }
                 long b = long.Parse(hexString, System.Globalization.NumberStyles.HexNumber);
 
                 br.ReadChar(); // )
