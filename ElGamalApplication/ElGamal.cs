@@ -104,9 +104,40 @@ namespace ElGamalApplication
             fs.Close();
         }
 
-        public List<Tuple> ReadTuplesFromFile(string fileName)
+        public List<Tuple> ReadTuplesFromFile(string fileName, Key.PrivateKey key)
         {
             var tuples = new List<Tuple>();
+
+            // Read text - init
+            BinaryReader br = new BinaryReader(File.OpenRead(fileName));
+
+            // Get block length
+            int blockLength = getByteLength(key.P);
+
+            int pos = 0;
+            char[] hexChars;
+            string hexString;
+            while (pos <= br.BaseStream.Length)
+            {
+                br.ReadChar(); // (
+                hexChars = br.ReadChars(blockLength * 2); // 1 byte = 2 hex
+                hexString = new String(hexChars);
+                long a = long.Parse(hexString, System.Globalization.NumberStyles.HexNumber);
+
+                br.ReadChar(); // ,
+                hexChars = br.ReadChars(blockLength * 2); // 1 byte = 2 hex
+                hexString = new String(hexChars);
+                long b = long.Parse(hexString, System.Globalization.NumberStyles.HexNumber);
+
+                br.ReadChar(); // )
+
+                Tuple t = new Tuple();
+                t.a = a;
+                t.b = b;
+                tuples.Add(t);
+
+                pos += 3 + (blockLength * 4);
+            }
 
             return tuples;
         }
@@ -128,7 +159,7 @@ namespace ElGamalApplication
         public void Decrypt(string sourceFileName, string targetFileName, Key.PrivateKey key)
         {
             // Fetch tuples
-            tuples = ReadTuplesFromFile(sourceFileName);
+            tuples = ReadTuplesFromFile(sourceFileName, key);
 
             // Calculate byte length
             // byteLength is used to determine how to write to the target file
