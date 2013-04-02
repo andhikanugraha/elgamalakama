@@ -31,6 +31,7 @@ namespace ElGamalApplication
             // Block Message Length based on value of P in key
             int blockLength = getByteLength(key.P);
             int n_blockLength = blockLength;
+            System.Diagnostics.Debug.WriteLine(blockLength);
 
             // byte to read from file
             int byte_read = fs.ReadByte();
@@ -41,15 +42,16 @@ namespace ElGamalApplication
             // Process Message
             while (byte_read >= 0)
             {
-                
+
                 int temp_byte = -1;
 
-                while (byte_read >= 0 && message < key.P && n_blockLength >= 0)
+                while (byte_read >= 0 && message < key.P && n_blockLength > 0)
                 {
                     message = 255 * message + byte_read;
                     n_blockLength--;
                     byte_read = fs.ReadByte();
                 }
+                
 
                 // if Message more than block or P
                 if (message >= key.P)
@@ -58,7 +60,7 @@ namespace ElGamalApplication
                     message = message/255;
                 }
 
-                long k = key.P-2; // Must be random
+                long k = 1520; // Must be random
                 long a = modular_pow(key.G, k, key.P);
                 long b = modular_pow(message, key.Y, k, key.P);
                 
@@ -67,6 +69,7 @@ namespace ElGamalApplication
                 t.b = b;
 
                 tuples.Add(t);
+
 
                 System.Diagnostics.Debug.WriteLine(message);
                 //Console.WriteLine(message);
@@ -80,6 +83,7 @@ namespace ElGamalApplication
                     message = message*255 + temp_byte;
                     n_blockLength--;
                 }
+
 
             }
 

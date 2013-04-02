@@ -74,13 +74,13 @@
                             <ColumnDefinition Width="1*"/>
                             <ColumnDefinition Width="2*"/>
                         </Grid.ColumnDefinitions>
-                        <Label Content="p" Grid.Column="0" Margin="6,0,0,0" Height="28"/>
-                        <TextBox Grid.Column="1" Margin="0,6,0,0"/>
-                        <Label Content="q" Grid.Column="2" Margin="6,0,0,0" Height="28"/>
-                        <TextBox Grid.Column="3" Margin="0,6,0,0"/>
-                        <Label Content="x" Grid.Column="4" Margin="6,0,0,0" Height="28"/>
-                        <TextBox Grid.Column="5" Margin="0,6,0,0"/>
-                        <Button Grid.Column="6" Margin="6,6,6,0" Height="23" Content="Load"/>
+                        <Label Content="y" Grid.Column="0" Margin="6,0,0,0" Height="28"/>
+                        <TextBox x:Name="encrypt_key_y" Grid.Column="1" Margin="0,6,0,0" HorizontalAlignment="Left" Width="51" Height="23" VerticalAlignment="Top"/>
+                        <Label Content="g" Grid.Column="2" Margin="6,0,0,0" Height="28"/>
+                        <TextBox x:Name="encrypt_key_g" Grid.Column="3" Margin="0,6,0,0"/>
+                        <Label Content="p" Grid.Column="4" Margin="6,0,0,0" Height="28"/>
+                        <TextBox x:Name="encrypt_key_p" Grid.Column="5" Margin="0,6,0,0"/>
+                        <Button x:Name="encrypt_Load_Key" Grid.Column="6" Margin="6,6,6,0" Height="23" Content="Load" VerticalAlignment="Top" Click="encrypt_Load_Key_Click"/>
                     </Grid>
                 </Grid>
             </TabItem>
