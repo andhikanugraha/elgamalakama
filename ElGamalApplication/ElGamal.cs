@@ -115,39 +115,42 @@ namespace ElGamalApplication
             int blockLength = getByteLength(key.P);
 
             int pos = 0;
-            char[] hexChars;
             char currentChar;
             string hexString;
             while (pos <= br.BaseStream.Length)
             {
                 br.ReadChar(); // (
+                ++pos;
+
                 currentChar = br.ReadChar();
+                ++pos;
+
                 hexString = "";
                 while (currentChar != ',')
                 {
                     hexString += currentChar;
                     currentChar = br.ReadChar();
+                    ++pos;
                 }
                 
                 long a = long.Parse(hexString, System.Globalization.NumberStyles.HexNumber);
 
                 currentChar = br.ReadChar();
+                ++pos;
+
                 hexString = "";
-                while (currentChar != ',')
+                while (currentChar != ')')
                 {
                     hexString += currentChar;
                     currentChar = br.ReadChar();
+                    ++pos;
                 }
                 long b = long.Parse(hexString, System.Globalization.NumberStyles.HexNumber);
-
-                br.ReadChar(); // )
 
                 Tuple t = new Tuple();
                 t.a = a;
                 t.b = b;
                 tuples.Add(t);
-
-                pos += 3 + (blockLength * 4);
             }
 
             return tuples;
