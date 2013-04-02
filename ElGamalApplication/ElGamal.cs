@@ -29,11 +29,11 @@ namespace ElGamalApplication
             FileStream fs = new FileStream(fileName, FileMode.Open, FileAccess.Read);
 
             // Block Message Length based on value of P in key
-            int blockLength = getBitLength(key.P);
+            int blockLength = getByteLength(key.P);
             int n_blockLength = blockLength;
+            System.Diagnostics.Debug.WriteLine(blockLength);
 
             // byte to read from file
-            int n_byte = 8;
             int byte_read = fs.ReadByte();
             
             // Message that want to be encrypt
@@ -42,35 +42,25 @@ namespace ElGamalApplication
             // Process Message
             while (byte_read >= 0)
             {
-                
-                int temp_bit = -1;
+
+                int temp_byte = -1;
 
                 while (byte_read >= 0 && message < key.P && n_blockLength > 0)
                 {
-                    if (n_byte == 0)
-                    {
-                        // Read next byte of file
-                        byte_read = fs.ReadByte();
-                        n_byte = 8;
-                        if (byte_read < 0) break;
-                    }
-
-                    int bit = (byte_read >> (n_byte - 1)) % 2 == 0 ? 0 : 1;
-                    message = (message << 1 )+ bit;
-                
-                    n_byte--;
+                    message = 255 * message + byte_read;
                     n_blockLength--;
-                
+                    byte_read = fs.ReadByte();
                 }
+                
 
                 // if Message more than block or P
-                if (message >= key.P || n_blockLength < 0)
+                if (message >= key.P)
                 {
-                    temp_bit = (byte_read >> (n_byte - 1)) % 2 == 0 ? 0 : 1;
-                    message = message >> 1;
+                    temp_byte = byte_read;
+                    message = message/255;
                 }
 
-                long k = key.P-2; // Must be random
+                long k = 1520; // Must be random
                 long a = modular_pow(key.G, k, key.P);
                 long b = modular_pow(message, key.Y, k, key.P);
                 
@@ -80,16 +70,18 @@ namespace ElGamalApplication
 
                 tuples.Add(t);
 
+                System.Diagnostics.Debug.WriteLine(message);
+                //Console.WriteLine(message);
+
                 message = 0;
                 n_blockLength = blockLength;
 
                 // if only the temp_bit have any value
-                if (temp_bit >= 0)
+                if (temp_byte >= 0)
                 {
-                    message = message << 1 + temp_bit;
+                    message = message*255 + temp_byte;
                     n_blockLength--;
                 }
-
             }
 
             fs.Close();
@@ -204,24 +196,13 @@ namespace ElGamalApplication
         #endregion
 
         // Get Bit Length based on p
-        private int getBitLength(long p)
-        {
-            int count = 0;
-            while (p / 2 != 0)
-            {
-                count++;
-                p = p / 2;
-            }
-            return count;
-        }
-
         private int getByteLength(long p)
         {
-            int count = 0;
-            while (p / 8 != 0)
+            int count = 1;
+            while (p / 255 != 0)
             {
                 count++;
-                p = p / 8;
+                p = p / 255;
             }
             return count;
         }

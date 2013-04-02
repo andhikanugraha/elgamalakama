@@ -18,11 +18,17 @@ using Microsoft.Win32;
 
 namespace ElGamalApplication
 {
+
+   
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window
     {
+
+        ElGamal elgamal = new ElGamal();
+
+
         public MainWindow()
         {
             InitializeComponent();
@@ -57,6 +63,27 @@ namespace ElGamalApplication
                 string filename = dlg.FileName;
                 target.Text = filename;
             }
+        }
+
+        private string ShowOpenDialog(string filter = "All files (*.*)|*.*" )
+        {
+            string s = null;
+            // Instantiate open file dialog
+            OpenFileDialog dlg = new OpenFileDialog();
+            dlg.FileName = "";
+            dlg.DefaultExt = "";
+            dlg.Filter = filter;
+
+            // Show dialog
+            Nullable<bool> result = dlg.ShowDialog();
+
+            // Process choice
+            if (result == true)
+            {
+                string filename = dlg.FileName;
+                s = filename;
+            }
+            return s;
         }
 
         private void browseUnencryptedFileButton_Click(object sender, RoutedEventArgs e)
@@ -112,51 +139,33 @@ namespace ElGamalApplication
 
         private void encryptButton_Click(object sender, RoutedEventArgs e)
         {
-            // TODO Multihreading
-            //try
-            //{
-            //    string sourceFileName = unencryptedFileName.Text;
-            //    string destinationFileName = encryptionDestinationFileName.Text;
-            //    string key = encryptionKey.Text;
-            //    string mode = encryptionMode.Text;
-                
-            //    byte cipherMode;
+            Encrypt();
+        }
 
-            //    switch (mode)
-            //    {
-            //        case "ECB":
-            //            cipherMode = Engine.ECB;
-            //            break;
-            //        case "CBC":
-            //            cipherMode = Engine.CBC;
-            //            break;
-            //        case "CFB":
-            //            cipherMode = Engine.CFB;
-            //            break;
-            //        case "OFB":
-            //            cipherMode = Engine.OFB;
-            //            break;
-            //        default:
-            //            throw new Exception("Invalid mode of operation.");
-            //    }
+        private void Encrypt()
+        {
+            try
+            {
+                string sourceFile = unencryptedFileName.Text;
+                string destinationFile = encryptionDestinationFileName.Text;
+                long y = long.Parse(encrypt_key_y.Text);
+                long g = long.Parse(encrypt_key_g.Text);
+                long p = long.Parse(encrypt_key_p.Text);
 
-            //    Engine.StartEncryption(sourceFileName, destinationFileName, key, cipherMode);
+                Key.PublicKey key = new Key.PublicKey();
 
-            //    ShowMessageBox("Encryption completed.", MessageBoxButton.OK, MessageBoxImage.Information);
+                key.Y = y;
+                key.G = g;
+                key.P = p;
 
-            //    decryptionKey.Text = key;
-            //    encryptedFileName.Text = destinationFileName;
-            //    if (decryptionDestinationFileName.Text == "")
-            //        decryptionDestinationFileName.Text = sourceFileName;
-            //}
-            //catch (Exception ex)
-            //{
-            //    Debug.WriteLine("\nMessage ---\n{0}", ex.Message);
-            //    Debug.WriteLine("\nHelpLink ---\n{0}", ex.HelpLink);
-            //    Debug.WriteLine("\nSource ---\n{0}", ex.Source);
-            //    Debug.WriteLine("\nStackTrace ---\n{0}", ex.StackTrace);
-            //    ShowMessageBox(ex.Message);
-            //}
+                elgamal.Encrypt(sourceFile, key);
+                elgamal.SaveEncryptToFile(destinationFile);
+            }
+            catch (Exception e)
+            {
+                System.Diagnostics.Debug.WriteLine(e);
+            }
+            
         }
 
         private void decryptButton_Click(object sender, RoutedEventArgs e)
@@ -271,6 +280,19 @@ namespace ElGamalApplication
             {
                 ShowMessageBox("Key generation failed.");
             }
+        }
+
+        private void encrypt_Load_Key_Click(object sender, RoutedEventArgs e)
+        {
+            string fileKey = ShowOpenDialog("Public Key (*.pub)|*.pub");
+            if (fileKey == null) return;
+
+            Key.PublicKey key = Key.GeneratePublicKeyFromFile(fileKey);
+
+            encrypt_key_g.Text = key.G.ToString();
+            encrypt_key_p.Text = key.P.ToString();
+            encrypt_key_y.Text = key.Y.ToString();
+
         }
     }
 }
