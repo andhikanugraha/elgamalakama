@@ -112,6 +112,7 @@ namespace ElGamalApplication
 
         private void encryptButton_Click(object sender, RoutedEventArgs e)
         {
+
             // TODO Multihreading
             //try
             //{
@@ -157,6 +158,18 @@ namespace ElGamalApplication
             //    Debug.WriteLine("\nStackTrace ---\n{0}", ex.StackTrace);
             //    ShowMessageBox(ex.Message);
             //}
+        }
+
+        private void Encrypt()
+        {
+            string sourceFile = unencryptedFileName.Text;
+            string destinationFile = encryptionDestinationFileName.Text;
+            long p = long.Parse(encrypt_key_p.Text);
+            long q = long.Parse(encrypt_key_q.Text);
+            long x = long.Parse(encrypt_key_x.Text);
+
+            Key.PublicKey key = new Key.PublicKey();
+            
         }
 
         private void decryptButton_Click(object sender, RoutedEventArgs e)
