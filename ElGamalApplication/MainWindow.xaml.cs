@@ -170,24 +170,24 @@ namespace ElGamalApplication
 
         private void decryptButton_Click(object sender, RoutedEventArgs e)
         {
-            //try
-            //{
-            //    string sourceFileName = encryptedFileName.Text;
-            //    string destinationFileName = decryptionDestinationFileName.Text;
-            //    string key = decryptionKey.Text;
+            try
+            {
+                string sourceFile = encryptedFileName.Text;
+                string destinationFile = decryptionDestinationFileName.Text;
+                long x = long.Parse(decryptKeyX.Text);
+                long p = long.Parse(decryptKeyP.Text);
 
-            //    Engine.StartDecryption(sourceFileName, destinationFileName, key);
+                Key.PrivateKey key = new Key.PrivateKey();
 
-            //    ShowMessageBox("Decryption completed.", MessageBoxButton.OK, MessageBoxImage.Information);
-            //}
-            //catch (Exception ex)
-            //{
-            //    Debug.WriteLine("\nMessage ---\n{0}", ex.Message);
-            //    Debug.WriteLine("\nHelpLink ---\n{0}", ex.HelpLink);
-            //    Debug.WriteLine("\nSource ---\n{0}", ex.Source);
-            //    Debug.WriteLine("\nStackTrace ---\n{0}", ex.StackTrace);
-            //    ShowMessageBox(ex.Message);
-            //}
+                key.X = x;
+                key.P = p;
+
+                elgamal.Decrypt(sourceFile, destinationFile, key);
+            }
+            catch (Exception ex)
+            {
+                ShowMessageBox(ex.Message);
+            }
         }
 
         // --- READ FILE UI ---
@@ -293,6 +293,17 @@ namespace ElGamalApplication
             encrypt_key_p.Text = key.P.ToString();
             encrypt_key_y.Text = key.Y.ToString();
 
+        }
+
+        private void loadDecryptionKeyButton_Click(object sender, RoutedEventArgs e)
+        {
+            string fileKey = ShowOpenDialog("Private Key (*.pri)|*.pri");
+            if (fileKey == null) return;
+
+            Key.PrivateKey key = Key.GeneratePrivateKeyFromFile(fileKey);
+
+            decryptKeyP.Text = key.P.ToString();
+            decryptKeyX.Text = key.X.ToString();
         }
     }
 }
