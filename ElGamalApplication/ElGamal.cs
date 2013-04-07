@@ -34,10 +34,11 @@ namespace ElGamalApplication
             System.Diagnostics.Debug.WriteLine(blockLength);
 
             // byte to read from file
-            int byte_read = fs.ReadByte();
+            int byte_read = 0;
             
             // Message that want to be encrypt
             long message = 0;
+            
 
             // Process Message
             while (byte_read >= 0)
@@ -47,17 +48,19 @@ namespace ElGamalApplication
 
                 while (byte_read >= 0 && message < key.P && n_blockLength > 0)
                 {
-                    message = 255 * message + byte_read;
-                    n_blockLength--;
                     byte_read = fs.ReadByte();
+                    if (byte_read < 0) break;
+                    message = 256 * message + byte_read;
+                    n_blockLength--;
+                    System.Diagnostics.Debug.WriteLine((char)byte_read);
                 }
                 
 
                 // if Message more than block or P
-                if (message >= key.P)
+                if (message >= key.P )
                 {
                     temp_byte = byte_read;
-                    message = message/255;
+                    message = message/256;
                 }
 
                 long k = 1520; // Must be random
@@ -69,8 +72,7 @@ namespace ElGamalApplication
                 t.b = b;
 
                 tuples.Add(t);
-
-                System.Diagnostics.Debug.WriteLine(message);
+                System.Diagnostics.Debug.WriteLine("process :" + (char)message + "," + message);
                 //Console.WriteLine(message);
 
                 message = 0;
@@ -79,11 +81,11 @@ namespace ElGamalApplication
                 // if only the temp_bit have any value
                 if (temp_byte >= 0)
                 {
-                    message = message*255 + temp_byte;
+                    message = message*256 + temp_byte;
                     n_blockLength--;
                 }
             }
-
+            System.Diagnostics.Debug.WriteLine("Count Encrypt : " + tuples.Count());
             fs.Close();
         }
 
@@ -117,7 +119,7 @@ namespace ElGamalApplication
             int pos = 0;
             char currentChar;
             string hexString;
-            while (pos <= br.BaseStream.Length)
+            while (pos < br.BaseStream.Length)
             {
                 br.ReadChar(); // (
                 ++pos;
@@ -174,7 +176,7 @@ namespace ElGamalApplication
         {
             // Fetch tuples
             tuples = ReadTuplesFromFile(sourceFileName, key);
-
+            System.Diagnostics.Debug.WriteLine("Count Decrypt : " + tuples.Count());
             // Calculate byte length
             // byteLength is used to determine how to write to the target file
             var byteLength = getByteLength(key.P);
@@ -191,7 +193,7 @@ namespace ElGamalApplication
 
                 // Write
                 // TODO if number of bytes is not power of 2
-                switch (byteLength)
+                switch (getByteLength(m))
                 {
                     case 1:
                         bw.Write((byte)m);
@@ -244,10 +246,10 @@ namespace ElGamalApplication
         private int getByteLength(long p)
         {
             int count = 1;
-            while (p / 255 != 0)
+            while (p / 256 != 0)
             {
                 count++;
-                p = p / 255;
+                p = p / 256;
             }
             return count;
         }
